@@ -79,16 +79,6 @@ X_train_anormal, X_val_anormal, X_test_anormal = splitDataset(AnormalImagesStore
 # Splitting the negativeImagesStored dataset
 X_train_negative, X_val_negative, X_test_negative = splitDataset(negativeImagesStored)
 
-# Print the sizes of the datasets
-# print(f'Tamanho do conjunto de treinamento (Anormal): {len(X_train_anormal)}')
-# print(f'Tamanho do conjunto de validação (Anormal): {len(X_val_anormal)}')
-# print(f'Tamanho do conjunto de teste (Anormal): {len(X_test_anormal)}')
-
-# print(f'Tamanho do conjunto de treinamento (Negativo): {len(X_train_negative)}')
-# print(f'Tamanho do conjunto de validação (Negativo): {len(X_val_negative)}')
-# print(f'Tamanho do conjunto de teste (Negativo): {len(X_test_negative)}')
-
-##teste
 # Definir a arquitetura da CNN
 model = Sequential()
 
@@ -101,7 +91,7 @@ model.add(Conv2D(64, (3, 3), activation='relu'))
 model.add(MaxPooling2D((2, 2)))
 
 # Terceira camada convolucional
-model.add(Conv2D(128, (3, 3), activation='relu'))
+model.add(Conv2D(128, (3, 3), activation='relu')) 
 model.add(MaxPooling2D((2, 2)))
 
 # Camada de flatten
@@ -140,10 +130,6 @@ history = model.fit(
     batch_size=32
 )
 
-# Avaliar o modelo
-# loss, accuracy = model.evaluate(X_test, y_test)
-# print(f'Acurácia no conjunto de teste: {accuracy}')
-##teste
 
 # Fazer previsões no conjunto de teste
 y_pred = (model.predict(X_test) > 0.5).astype("int32")
@@ -183,20 +169,4 @@ plt.legend()
 
 plt.tight_layout()
 plt.show()
-
-# imagesAnormal = loadImagesFromFolder(imagesASCUSLink, AnormalImagesStored)
-# imagesAnormal = loadImagesFromFolder(imagesLSILLink, AnormalImagesStored)
-# imagesAnormal = loadImagesFromFolder(imagesASCHLink, AnormalImagesStored)
-# imagesAnormal = loadImagesFromFolder(imagesHSILLink, AnormalImagesStored)
-# imagesAnormal = loadImagesFromFolder(imagesCarcinomaLink, AnormalImagesStored)
-
-
-# for idx, img in enumerate(imagesNegative):
-#     print(f"{idx + 1}")
-
-# Read the image using OpenCV
-#image = cv2.imread('cells/ASC-H/0f023f6ad3d33b33334016798995fe53_377_402.tif')
-
-# Show the image using OpenCV
-#cv2.imshow('Image', image)
 #cv2.waitKey(0)  # Press any key to close the window
