@@ -1,13 +1,10 @@
-import os
-import cv2
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, classification_report
 import matplotlib.pyplot as plt
-import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
+from Utils.dataLoader import loadImagesFromFolder, splitDataset
 
 
 # pip install opencv-python tensorflow keras matplotlib numpy pandas scikit-learn
@@ -15,11 +12,11 @@ from tensorflow.keras.optimizers import Adam
 
 
 # path to the anormal 
-imagesASCUSLink = "cells/ASC-US/"
-imagesLSILLink = "cells/LSIL/"
-imagesASCHLink = "cells/ASC-H/"
-imagesHSILLink = "cells/HSIL/"
-imagesCarcinomaLink = "cells/carcinoma/"
+imagesASCUSLink = "Data/cells/ASC-US/"
+imagesLSILLink = "Data/cells/LSIL/"
+imagesASCHLink = "Data/cells/ASC-H/"
+imagesHSILLink = "Data/cells/HSIL/"
+imagesCarcinomaLink = "Data/cells/carcinoma/"
 
 imagesAnormalCelulaeLink = [
     imagesASCUSLink,
@@ -31,30 +28,11 @@ imagesAnormalCelulaeLink = [
 
 
 # path to negative 
-imagesNegativaLink = "cells/Negativa/"
+imagesNegativaLink = "Data/cells/Negativa/"
 
 # where the images are stored
 negativeImagesStored = []
 AnormalImagesStored = []
-
-
-#function to load images 
-def loadImagesFromFolder(imagePaths, imageReceiver):
-    
-    for path in os.listdir(imagePaths):
-        path = os.path.join(imagePaths, path)
-        # Verifica se o arquivo existe antes de tentar carregá-lo
-        if os.path.exists(path):
-            image = cv2.imread(path)
-            if image is not None:
-                resizedImage = cv2.resize(image,(100,100))
-                normalizedImage = resizedImage / 255
-                imageReceiver.append(normalizedImage)
-            else:
-                print(f"Error the image doenst found in path: {path}")
-        else:
-            print(f"Error the archive was missing in path: {path}")
-    return imageReceiver
 
 # populating ImagesAnormal
 for folder in imagesAnormalCelulaeLink:
@@ -62,16 +40,6 @@ for folder in imagesAnormalCelulaeLink:
 
 #Populating ImagesNegative
 imagesNegative = loadImagesFromFolder(imagesNegativaLink, negativeImagesStored)
-
-# Function to split the dataset into training, validation, and test sets
-def splitDataset(images, test_size=0.2, validation_size=0.25, random_state=42):
-    # Split into training+validation and test
-    X_train_val, X_test = train_test_split(images, test_size=test_size, random_state=random_state)
-    
-    # Split training+validation into training and validation
-    X_train, X_val = train_test_split(X_train_val, test_size=validation_size, random_state=random_state)
-    
-    return X_train, X_val, X_test
 
 # Splitting the AnormalImagesStored dataset
 X_train_anormal, X_val_anormal, X_test_anormal = splitDataset(AnormalImagesStored)
